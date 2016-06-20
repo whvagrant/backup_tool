@@ -20,18 +20,34 @@ function tar_dir()
     t_file=$BAK_DIR/${1}.$date
     echo "s_dir   :"$s_dir
     echo "t_file  :"$t_file
-    $tar -cvzf $t_file $s_dir
+    $tar -cvzf $t_file $s_dir > /dev/null 2>&1
+    cp_file_to_remote $t_file
+}
+
+# backup local file to remote 
+function cp_file_to_remote()
+{
+   s_file=$1 
+   t_dir="/home/users/wanghao46/wanghao46/bak/"$date
+   echo "s_file      :"$s_file
+   echo "t_dir       :"$t_dir
+   echo "remote host :"$remote_host
+   command="if [ ! -d $t_dir ]; then
+                mkdir $t_dir
+            fi"
+   
+   ssh $remote_host "${command}"
+   scp $s_file $remote_host:$t_dir
 }
 
 function main()
 {
     if [ $dir == "all" ]; then
-        s_dir="bin"
-        tar_dir $s_dir
-        s_dir="sql"
-        tar_dir $s_dir
+        for((i=0; $i<${#all_dir[@]}; i=i+1)); do
+            tar_dir ${all_dir[$i]}
+            echo ${all_dir[$i]}" done!"
+        done
     else 
-        s_dir=$dir
         tar_dir $dir
     fi
 }
@@ -65,9 +81,7 @@ fi
 echo "dir  :"$dir
 echo "date :"$date
 
-tar=/home/map/.jumbo/bin/tar
-HOME=/home/map/wanghao46
-BAK_DIR=$HOME/bak/$date
+source $(dirname ${BASH_SOURCE[0]})/config.sh
 
 if [ ! -d "$BAK_DIR" ]; then
     mkdir $BAK_DIR
