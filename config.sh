@@ -24,7 +24,7 @@ BAK_DIR=(
 
 # remote host
 remote_host=(
-    "wanghao46@cp01-rdqa-dev512.cp01.baidu.com"
+
 )
 
 # tar tool
