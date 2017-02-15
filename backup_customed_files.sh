@@ -4,7 +4,6 @@
 # @desc Backup bin&sql directories
 # @date 2016/06/15
 #
-# @author wanghao46@baidu.com
 ########################################################
 
 function help()
@@ -28,7 +27,7 @@ function tar_dir()
 function cp_file_to_remote()
 {
    s_file=$1 
-   t_dir="/home/users/wanghao46/wanghao46/bak/"$date
+   t_dir="$t_dir"$date
    echo "s_file      :"$s_file
    echo "t_dir       :"$t_dir
    echo "remote host :"$remote_host
